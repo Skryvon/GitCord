@@ -34,7 +34,7 @@ GitCord collects those tricks in one place, with **ready-to-copy examples**, **t
 | 📚 | [Styles](#styles) | `diff`, `fix`, `ini`, `css`, `json`, `js`, plain, and more |
 | 🧪 | [Templates](#templates) | Announcements, changelogs, rules, status boards |
 | ✨ | [Other formatting](#other-formatting) | Bold, italic, spoilers, quotes, headings |
-| 🧰 | [Features and commands](#features) | Timestamps, scheduled events, timeout, slowmode |
+| 🧰 | [Features and commands](#features) | `@time`, `/schedule`, `@game`, events, timeout, slowmode, mentions |
 | 📏 | [Rules and limits](#rules) | What to remember |
 | 🛟 | [Troubleshooting](#troubleshooting) | Fix common problems |
 | 🧭 | [Roadmap](#roadmap) | What is coming next |
@@ -463,37 +463,124 @@ Start a line with `#` to make a heading. More `#` signs means a smaller heading.
 <a id="features"></a>
 ## 🧰 Discord features and commands
 
-Handy built-in Discord features, short and simple.
+Short and simple.
 
-| Feature | What it does | How to use it |
+| | Feature | Command | What it does |
+| --- | --- | --- | --- |
+| 🕒 | Timestamps | `@time` | Shows local time |
+| ⏰ | Scheduled messages | `/schedule` | Send later |
+| 🎮 | Game search | `@game` | Search game list |
+| 📅 | Scheduled events | **Create Event** | RSVP calendar |
+| 🔇 | Timeout | **Timeout** | Temporary mute |
+| 🐢 | Slowmode | **Slowmode** | Limit messages |
+
+> 🔑 **Permissions:** Timeout needs **Timeout Members**, events need **Create Events** (or **Manage Events**), slowmode needs **Manage Channels**.
+
+---
+
+<a id="timestamps"></a>
+### 🕒 Timestamps
+
+Everyone sees **their own time zone**.
+
+**Two ways:**
+- Type `@time` plus a time, like `@time tomorrow at 5pm`
+- Or write `<t:UNIX_TIMESTAMP:STYLE>`
+
+A Unix timestamp is a **10-digit number** (seconds since 1970). Example: `1798761600` is January 1, 2027, midnight UTC.
+
+| Code | Style | Shows |
 | --- | --- | --- |
-| 🕒 **Dynamic timestamps** (`@time`) | Shows a time in each viewer's own time zone | Type `@time` plus a date or relative term, like `@time tomorrow at 5pm`. Or build one yourself with `<t:UNIX_TIMESTAMP:format>` |
-| ⏰ **Scheduled messages** | Posts a message or announcement automatically at a set time | Click the **+** icon in the chat bar, choose **Schedule a message**, set the time, and write your message |
-| 📅 **Scheduled events** | Creates a calendar entry for a game night or meeting, with RSVPs and notifications | Click your server name, choose **Create Event**, then fill in the topic, time and location. Members click **Interested** to get notified when it starts |
-| 🔇 **Timeout** | Temporarily stops a user from messaging, reacting or joining voice | Right-click the user, choose **Timeout**, and pick a duration (60 seconds up to 28 days). It lifts automatically |
-| 🐢 **Slowmode** | Limits how often people can send messages in a text channel | Open **Edit Channel**, then move the **Slowmode** slider (up to 6 hours). A countdown shows on the chat bar after each message |
-
-> 🔑 **Permissions:** Timeout needs **Timeout Members**, creating events needs **Create Events** (or **Manage Events**), and changing slowmode needs **Manage Channels**.
-
-### 🕒 Timestamp formats
-
-Replace `UNIX_TIMESTAMP` with a Unix time in seconds (any online Unix timestamp converter will give you one) and pick a format letter:
-
-| Tag | Shows |
-| --- | --- |
-| `<t:UNIX_TIMESTAMP:t>` | Short time |
-| `<t:UNIX_TIMESTAMP:T>` | Long time |
-| `<t:UNIX_TIMESTAMP:d>` | Short date |
-| `<t:UNIX_TIMESTAMP:D>` | Long date |
-| `<t:UNIX_TIMESTAMP:f>` | Short date and time (default) |
-| `<t:UNIX_TIMESTAMP:F>` | Long date and time with weekday |
-| `<t:UNIX_TIMESTAMP:R>` | Relative, like "in 3 hours" |
+| `<t:1798761600:t>` | `t` | Short time |
+| `<t:1798761600:d>` | `d` | Short date |
+| `<t:1798761600:D>` | `D` | Long date |
+| `<t:1798761600:f>` | `f` | Date and time |
+| `<t:1798761600:F>` | `F` | Full date and time |
+| `<t:1798761600:R>` | `R` | Live countdown |
 
 **Copy this:**
 
 ````
-<t:1700000000:F> (<t:1700000000:R>)
+<t:1798761600:F> (<t:1798761600:R>)
 ````
+
+> 💡 **Tip:** Don't want to work out the number? Use an online Discord timestamp generator, pick a time, and copy the code.
+
+---
+
+<a id="schedule"></a>
+### ⏰ Scheduled messages
+
+1. Type `/schedule` (or click **+** then **Schedule a message**)
+2. Set the time
+3. Write your message
+
+It posts automatically when the time comes.
+
+---
+
+<a id="games"></a>
+### 🎮 Games
+
+| Need | Use |
+| --- | --- |
+| Search games | `@game` |
+| Game tag | None. There is no `<g:GAME>` tag |
+| Bot shows a game | Reads the user's **Activity** |
+
+Bots get `activity.name` and `activity.application_id` from Discord's rich presence data. This needs the **Presence Intent**.
+
+---
+
+<a id="events"></a>
+### 📅 Scheduled events
+
+1. Click your server name
+2. Choose **Create Event**
+3. Add topic, time, location
+4. Members click **Interested**
+
+They get a notification when it starts.
+
+---
+
+<a id="timeout"></a>
+### 🔇 Timeout
+
+1. Right-click the user
+2. Choose **Timeout**
+3. Pick a time (60 seconds to 28 days)
+
+They can't message, react or join voice. It ends automatically.
+
+---
+
+<a id="slowmode"></a>
+### 🐢 Slowmode
+
+1. Open **Edit Channel**
+2. Move the **Slowmode** slider (up to 6 hours)
+
+A countdown shows after each message.
+
+---
+
+<a id="mentions"></a>
+### 🤖 Mentions (IDs)
+
+Built with Discord IDs. Useful for bots.
+
+| Type | Code | Result |
+| --- | --- | --- |
+| 👤 User | `<@USER_ID>` | Pings user |
+| 🤖 Bot | `<@BOT_ID>` | Pings bot |
+| 🏷 Role | `<@&ROLE_ID>` | Pings role (note the `&`) |
+| 💬 Channel | `<#CHANNEL_ID>` | Clickable channel link |
+| ⚡ Slash command | `</name:COMMAND_ID>` | Clickable command |
+
+**Example:** `<@123456789012345678>`
+
+> 💡 **Get an ID:** Turn on **Developer Mode** in Settings, then right-click and choose **Copy ID**.
 
 ---
 
@@ -532,9 +619,9 @@ Replace `UNIX_TIMESTAMP` with a Unix time in seconds (any online Unix timestamp 
 - [x] Color cheat sheet
 - [x] Ready-made templates
 - [ ] 🌈 `ansi` blocks for more colors (desktop only)
-- [ ] 👤 Mentions for users, roles, channels and slash commands
+- [x] 👤 Mentions for users, roles, channels and slash commands
 - [x] 🕒 Timestamps that show in each person's time zone
-- [x] 🧰 Features and commands (scheduled events, timeout, slowmode)
+- [x] 🧰 Features and commands (`@time`, `/schedule`, `@game`, events, timeout, slowmode)
 - [ ] 🖼 Screenshots and GIFs of every style
 - [ ] 📱 Mobile notes
 - [ ] 🧪 More templates (tickets, giveaways, schedules)
