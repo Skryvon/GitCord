@@ -1,552 +1,539 @@
-# GitCord
+<div align="center">
 
-A beginner-friendly Discord bot (discord.js v14) that shows GitHub profiles, lists your server's **users, roles and channels**, and teaches you how Discord's mention shortcuts and clickable slash commands work.
+# 🎨 GitCord
 
-[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
-[![discord.js](https://img.shields.io/badge/discord.js-v14-5865F2)](https://discord.js.org)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+### The copy-paste guide to **colored code blocks in Discord**
 
----
+![Discord](https://img.shields.io/badge/Discord-Formatting-5865F2?logo=discord&logoColor=white)
+![Markdown](https://img.shields.io/badge/Made%20with-Markdown-000000?logo=markdown&logoColor=white)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 
-## Contents
+[🚀 Quick start](#quick-start) · [🎨 Colors](#colors) · [📚 Styles](#styles) · [🧪 Templates](#templates) · [🧭 Roadmap](#roadmap)
 
-1. [What you get](#what-you-get)
-2. [Discord elements cheat sheet](#discord-elements-cheat-sheet)
-3. [Quick start](#quick-start)
-4. [Project files](#project-files)
-5. [Commands](#commands)
-6. [How to use the `</commands:ID>` integration command](#how-to-use-the-commandsid-integration-command)
-7. [Troubleshooting](#troubleshooting)
-8. [Contributing](#contributing)
+</div>
 
 ---
 
-## What you get
+<a id="what-is-gitcord"></a>
+## 📖 What is GitCord?
 
-| Command | What it does |
+Discord has no "text color" button. But if you put your text inside a **code block** and add a **language name**, Discord colors it for you. That is how servers get green and red changelogs, blue announcement headers, and yellow warnings.
+
+GitCord collects those tricks in one place, with **ready-to-copy examples**, **tips**, **templates**, and **fixes** for when something does not work.
+
+---
+
+<a id="contents"></a>
+## 📑 Contents
+
+| | Section | What's inside |
+| --- | --- | --- |
+| 🚀 | [Quick start](#quick-start) | Use GitCord in 3 steps |
+| 🎨 | [Color cheat sheet](#colors) | Which block gives which color |
+| 📚 | [Styles](#styles) | `diff`, `fix`, `ini`, `css`, `json`, `js`, plain, and more |
+| 🧪 | [Templates](#templates) | Announcements, changelogs, rules, status boards |
+| ✨ | [Other formatting](#other-formatting) | Bold, italic, spoilers, quotes, headings |
+| 📏 | [Rules and limits](#rules) | What to remember |
+| 🛟 | [Troubleshooting](#troubleshooting) | Fix common problems |
+| 🧭 | [Roadmap](#roadmap) | What is coming next |
+| ➕ | [Add your own style](#add-your-own) | Template for new sections |
+| 🤝 | [Contributing](#contributing) | Help improve GitCord |
+
+---
+
+<a id="quick-start"></a>
+## 🚀 Quick start
+
+1. 📋 **Copy** a block from this guide. Hover over it and click the copy icon in the top-right corner.
+2. 💬 **Paste** it into the Discord message box.
+3. ✏️ **Edit** the text, then press Enter to send.
+
+> 💡 **Tip:** To make a new line while typing in Discord, press **Shift + Enter**. Plain Enter sends the message.
+
+### ⌨️ Typing the backtick yourself
+
+| Device | Where to find the backtick `` ` `` |
 | --- | --- |
-| `/github username` | Shows a GitHub profile (repos, followers, bio) |
-| `/users` | Lists server members as mentions |
-| `/roles` | Lists every role in the server |
-| `/channels` | Lists channels grouped by type |
-| `/commands` | Lists every bot command as a **clickable** command mention |
+| 🖥 Windows / Linux | The key to the left of `1` |
+| 🍎 Mac | The key to the left of `1` (below Esc) |
+| 📱 Phone | On the symbols keyboard. On some keyboards you can also long-press the apostrophe |
+
+### 🧠 The one formula to remember
+
+````
+```LANGUAGE
+your text here
+```
+````
+
+Replace `LANGUAGE` with `diff`, `ini`, `css`, `fix`, and so on. The language name decides the color.
+
+> 📌 The examples in this guide are wrapped in **four** backticks so GitHub can show you the exact three-backtick block to copy. In Discord you only type **three**.
 
 ---
 
-## Discord elements cheat sheet
+<a id="colors"></a>
+## 🎨 Color cheat sheet
 
-Everything in Discord has a numeric **ID**. Mentions are just the ID wrapped in special characters.
+| Color | Use this style | Type this |
+| --- | --- | --- |
+| 🟥 Red | [`diff`](#style-diff) | `- your text` |
+| 🟩 Green | [`diff`](#style-diff) | `+ your text` |
+| 🟨 Yellow | [`fix`](#style-fix) | `your text` |
+| 🟦 Blue | [`ini`](#style-ini) | `[your text]` |
+| 🟧 Orange | [`css`](#style-css) | `[your text]` |
+| 🟦 Cyan / teal | [`json`](#style-json) | `"your text"` |
+| ⬜ No color | [plain](#style-plain) | `your text` |
 
-| Element | Mention format | Example | discord.js property |
-| --- | --- | --- | --- |
-| User | `<@USER_ID>` | `<@123456789012345678>` | `user.id`, `` `${user}` `` |
-| Role | `<@&ROLE_ID>` | `<@&123456789012345678>` | `role.id`, `` `${role}` `` |
-| Channel | `<#CHANNEL_ID>` | `<#123456789012345678>` | `channel.id`, `` `${channel}` `` |
-| Slash command | `</name:COMMAND_ID>` | `</github:123456789012345678>` | `command.id` |
-| Subcommand | `</name subcommand:COMMAND_ID>` | `</github profile:123456789012345678>` | parent `command.id` |
-| Custom emoji | `<:name:EMOJI_ID>` | `<:wave:123456789012345678>` | `emoji.id` |
-| Timestamp | `<t:UNIX_SECONDS:R>` | `<t:1700000000:R>` | `Math.floor(Date.now() / 1000)` |
-
-**How to get an ID:** Discord Settings > Advanced > turn on **Developer Mode**, then right-click a user, role, channel or server and choose **Copy ID**.
-
-### Quick snippets
-
-```js
-// USERS
-const user = interaction.user;                    // who ran the command
-const mention = `<@${user.id}>`;                  // same as `${user}`
-const avatar = user.displayAvatarURL({ size: 256 });
-
-// MEMBERS (a user inside a server)
-const member = await interaction.guild.members.fetch(user.id);
-const joined = `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`;
-const roleMentions = member.roles.cache.map(r => `${r}`).join(' ');
-
-// ROLES
-const role = interaction.guild.roles.cache.find(r => r.name === 'Moderator');
-const everyoneWithRole = role?.members.map(m => `<@${m.id}>`);
-
-// CHANNELS
-const { ChannelType } = require('discord.js');
-const channels = await interaction.guild.channels.fetch();
-const textChannels = channels.filter(c => c.type === ChannelType.GuildText);
-const voiceChannels = channels.filter(c => c.type === ChannelType.GuildVoice);
-
-// SERVER (guild)
-const guild = interaction.guild;
-console.log(guild.name, guild.memberCount, guild.id);
-```
-
-> **Tip:** Mentions inside **embeds** never ping anyone. In normal message text, add `allowedMentions: { parse: [] }` to stop pings.
+> ⚠️ Colors depend on your theme (dark, light, AMOLED) and device, so they can look a little different on mobile. Test a block in your own Discord before using it in an announcement.
 
 ---
 
-## Quick start
+<a id="styles"></a>
+## 📚 Styles
 
-### 1. Requirements
+<a id="style-diff"></a>
+### ➕➖ diff: green and red
 
-- [Node.js](https://nodejs.org) 18 or newer
-- A Discord account and a server where you can add bots
+| | |
+| --- | --- |
+| **Colors** | `+` lines are 🟩 green, `-` lines are 🟥 red |
+| **Best for** | Changelogs, status boards, pros and cons, yes/no lists |
 
-### 2. Create the bot
+**Copy this:**
 
-1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and click **New Application**.
-2. Open **Bot**, then click **Reset Token** and copy it. Never share or commit it.
-3. Under **Bot > Privileged Gateway Intents**, enable **Server Members Intent** (needed for `/users`).
-4. Open **OAuth2 > URL Generator**, tick `bot` and `applications.commands`, and give it **Send Messages** and **Embed Links**.
-5. Open the generated URL and add the bot to your server.
-6. Copy the **Application ID** from **General Information**.
+````
+```diff
++ Online
+- Offline
++ New feature added
+- Old feature removed
+```
+````
 
-### 3. Install
+**Tips**
+- The `+` or `-` must be the **first character** on the line, with no spaces before it.
+- A line with no sign stays in the default color.
+- Add a space after the sign so it is easier to read.
 
-```bash
-git clone https://github.com/YOURNAME/gitcord.git
-cd gitcord
-npm install
+<details>
+<summary>👀 Preview (GitHub's colors)</summary>
+
+```diff
++ Online
+- Offline
++ New feature added
+- Old feature removed
 ```
 
-Create a file named `.env` (it is already ignored by git):
-
-```env
-DISCORD_TOKEN=your-bot-token
-CLIENT_ID=your-application-id
-GUILD_ID=your-server-id
-```
-
-`GUILD_ID` is optional. Set it while developing so commands update instantly. Remove it to register commands globally (global commands can take up to an hour to appear).
-
-### 4. Register commands, then run
-
-```bash
-npm run deploy
-npm start
-```
-
-You should see `Logged in as ...`. Type `/` in your server and the commands appear.
+</details>
 
 ---
 
-## Project files
+<a id="style-fix"></a>
+### 🟨 fix: yellow text
 
+| | |
+| --- | --- |
+| **Colors** | The **whole block** turns 🟨 yellow |
+| **Best for** | Warnings, notices, "read this" messages |
+
+**Copy this:**
+
+````
+```fix
+WARNING: The server restarts in 5 minutes.
 ```
-gitcord/
-├── commands/
-│   ├── github.js
-│   ├── users.js
-│   ├── roles.js
-│   ├── channels.js
-│   └── commands.js
-├── utils.js
-├── index.js
-├── deploy-commands.js
-├── package.json
-├── .env              (never commit this)
-└── .gitignore
+````
+
+**Tips**
+- You cannot mix colors inside a `fix` block. Use several blocks if you need more than one color.
+- GitHub does not color `fix`, so there is no preview here. It works in Discord.
+
+---
+
+<a id="style-ini"></a>
+### 🟦 ini: blue headers
+
+| | |
+| --- | --- |
+| **Colors** | `[Section]` text turns 🟦 blue. Keys, values and comments get their own shades |
+| **Best for** | Announcements, rules, profile cards, settings lists |
+
+**Copy this:**
+
+````
+```ini
+[ Server Rules ]
+Be kind = true
+No spam = true
+Max members = 100
+; this is a comment
+```
+````
+
+**Tips**
+- Put the text you want in blue inside `[square brackets]`.
+- Use `key = value` lines for neat label and value pairs.
+- Comments start with `;` or `#`.
+
+<details>
+<summary>👀 Preview (GitHub's colors)</summary>
+
+```ini
+[ Server Rules ]
+Be kind = true
+No spam = true
+Max members = 100
+; this is a comment
 ```
 
-### `package.json`
+</details>
+
+---
+
+<a id="style-css"></a>
+### 🟧 css: orange text
+
+| | |
+| --- | --- |
+| **Colors** | `[brackets]` usually show 🟧 orange. Real CSS colors selectors, properties and values |
+| **Best for** | Eye-catching titles, highlighted words, styled snippets |
+
+**Copy this (orange title):**
+
+````
+```css
+[ Orange title ]
+```
+````
+
+**Copy this (real CSS):**
+
+````
+```css
+.title {
+  color: orange;
+  font-size: 20px;
+}
+```
+````
+
+**Tips**
+- Comments use `/* like this */`.
+- Short one-line blocks make good banners.
+
+<details>
+<summary>👀 Preview (GitHub's colors)</summary>
+
+```css
+.title {
+  color: orange;
+  font-size: 20px;
+}
+```
+
+</details>
+
+---
+
+<a id="style-json"></a>
+### 🟦 json: keys, strings and numbers
+
+| | |
+| --- | --- |
+| **Colors** | Keys, text in `"quotes"`, numbers and `true` / `false` each get a different color |
+| **Best for** | Data, settings, API examples, cyan-ish highlighted text |
+
+**Copy this:**
+
+````
+```json
+{
+  "name": "GitCord",
+  "members": 100,
+  "active": true,
+  "tags": ["discord", "colors"]
+}
+```
+````
+
+**Tips**
+- Your text does not have to be valid JSON to get colors.
+- Text in `"double quotes"` is the easiest way to get a cyan or teal look.
+
+<details>
+<summary>👀 Preview (GitHub's colors)</summary>
 
 ```json
 {
-  "name": "gitcord",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "deploy": "node deploy-commands.js"
-  },
-  "dependencies": {
-    "discord.js": "^14.16.0",
-    "dotenv": "^16.4.5"
-  }
+  "name": "GitCord",
+  "members": 100,
+  "active": true,
+  "tags": ["discord", "colors"]
 }
 ```
 
-### `.gitignore`
-
-```
-node_modules
-.env
-```
-
-### `utils.js`
-
-```js
-const { Collection } = require('discord.js');
-
-/** Cut text so it fits inside an embed description (max 4096 characters). */
-function truncate(text, max = 4000) {
-  return text.length > max ? text.slice(0, max - 1) + '…' : text;
-}
-
-/**
- * Returns a Map of command name -> command object, including the real command ID.
- * Fetches global commands, then guild commands (which win if the names clash).
- */
-async function getCommandMap(client, guildId) {
-  const map = new Map();
-
-  const globalCommands = await client.application.commands.fetch();
-  globalCommands.forEach(cmd => map.set(cmd.name, cmd));
-
-  if (guildId) {
-    const guildCommands = await client.application.commands.fetch({ guildId });
-    guildCommands.forEach(cmd => map.set(cmd.name, cmd));
-  }
-
-  return map;
-}
-
-/** Builds a clickable command mention such as </github:123456789012345678>. */
-function commandMention(map, name, subcommand) {
-  const cmd = map.get(name);
-  if (!cmd) return `/${name}${subcommand ? ' ' + subcommand : ''}`; // plain-text fallback
-  return `</${cmd.name}${subcommand ? ' ' + subcommand : ''}:${cmd.id}>`;
-}
-
-module.exports = { truncate, getCommandMap, commandMention, Collection };
-```
-
-### `index.js`
-
-```js
-require('dotenv').config();
-const fs = require('node:fs');
-const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
-
-const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
-});
-
-// Load every file in /commands
-client.commands = new Collection();
-const commandsDir = path.join(__dirname, 'commands');
-for (const file of fs.readdirSync(commandsDir).filter(f => f.endsWith('.js'))) {
-  const command = require(path.join(commandsDir, file));
-  client.commands.set(command.data.name, command);
-}
-
-client.once(Events.ClientReady, c => {
-  console.log(`Logged in as ${c.user.tag}`);
-});
-
-client.on(Events.InteractionCreate, async interaction => {
-  if (!interaction.isChatInputCommand()) return;
-
-  const command = client.commands.get(interaction.commandName);
-  if (!command) return;
-
-  try {
-    await command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    const message = { content: 'Something went wrong running that command.', flags: MessageFlags.Ephemeral };
-    if (interaction.deferred || interaction.replied) await interaction.followUp(message);
-    else await interaction.reply(message);
-  }
-});
-
-client.login(process.env.DISCORD_TOKEN);
-```
-
-### `deploy-commands.js`
-
-```js
-require('dotenv').config();
-const fs = require('node:fs');
-const path = require('node:path');
-const { REST, Routes } = require('discord.js');
-
-const commandsDir = path.join(__dirname, 'commands');
-const body = fs
-  .readdirSync(commandsDir)
-  .filter(f => f.endsWith('.js'))
-  .map(f => require(path.join(commandsDir, f)).data.toJSON());
-
-const rest = new REST().setToken(process.env.DISCORD_TOKEN);
-const { CLIENT_ID, GUILD_ID } = process.env;
-
-(async () => {
-  const route = GUILD_ID
-    ? Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID)
-    : Routes.applicationCommands(CLIENT_ID);
-
-  const result = await rest.put(route, { body });
-  console.log(`Registered ${result.length} command(s) ${GUILD_ID ? 'to your server' : 'globally'}.`);
-})();
-```
+</details>
 
 ---
 
-## Commands
+<a id="style-js"></a>
+### 🟨 js: JavaScript
 
-Put each file below in the `commands/` folder.
+| | |
+| --- | --- |
+| **Colors** | Keywords, strings, numbers and comments each get their own color |
+| **Best for** | Sharing real code in chat |
 
-### `/github`: show a GitHub profile
+**Copy this:**
 
-`commands/github.js`
+````
+```js
+const name = "GitCord";
+// this is a comment
+console.log(`Hello, ${name}!`);
+```
+````
+
+**Tips**
+- Discord only colors the code. It never runs it.
+- Use `js` for JavaScript, `ts` for TypeScript, `py` for Python.
+
+<details>
+<summary>👀 Preview (GitHub's colors)</summary>
 
 ```js
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('github')
-    .setDescription('Show a GitHub profile')
-    .addStringOption(o =>
-      o.setName('username').setDescription('GitHub username, e.g. octocat').setRequired(true)),
-
-  async execute(interaction) {
-    await interaction.deferReply();
-    const username = interaction.options.getString('username', true).trim();
-
-    const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
-      headers: { 'User-Agent': 'gitcord-bot', Accept: 'application/vnd.github+json' },
-    });
-
-    if (res.status === 404) return interaction.editReply(`No GitHub user called **${username}**.`);
-    if (!res.ok) return interaction.editReply(`GitHub returned an error (${res.status}). Try again later.`);
-
-    const u = await res.json();
-    const embed = new EmbedBuilder()
-      .setTitle(u.name ? `${u.name} (@${u.login})` : `@${u.login}`)
-      .setURL(u.html_url)
-      .setThumbnail(u.avatar_url)
-      .setDescription(u.bio || 'No bio.')
-      .addFields(
-        { name: 'Repos', value: String(u.public_repos), inline: true },
-        { name: 'Followers', value: String(u.followers), inline: true },
-        { name: 'Following', value: String(u.following), inline: true },
-      )
-      .setColor(0x24292f);
-
-    await interaction.editReply({ embeds: [embed] });
-  },
-};
+const name = "GitCord";
+// this is a comment
+console.log(`Hello, ${name}!`);
 ```
 
-> GitHub allows 60 unauthenticated API requests per hour per IP. For more, send an `Authorization: Bearer YOUR_GITHUB_TOKEN` header.
-
-### `/users`: list server members
-
-`commands/users.js`
-
-```js
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { truncate } = require('../utils');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('users')
-    .setDescription('List the members of this server')
-    .setDMPermission(false),
-
-  async execute(interaction) {
-    await interaction.deferReply();
-    const members = await interaction.guild.members.fetch(); // needs the Server Members Intent
-
-    const humans = members.filter(m => !m.user.bot);
-    const bots = members.filter(m => m.user.bot);
-
-    const embed = new EmbedBuilder()
-      .setTitle(`Members of ${interaction.guild.name}`)
-      .setDescription(truncate(
-        `**Humans (${humans.size})**\n${humans.map(m => `<@${m.id}>`).join(' ') || 'None'}\n\n` +
-        `**Bots (${bots.size})**\n${bots.map(m => `<@${m.id}>`).join(' ') || 'None'}`
-      ))
-      .setColor(0x5865f2);
-
-    await interaction.editReply({ embeds: [embed] });
-  },
-};
-```
-
-### `/roles`: list roles
-
-`commands/roles.js`
-
-```js
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { truncate } = require('../utils');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('roles')
-    .setDescription('List all roles in this server')
-    .setDMPermission(false),
-
-  async execute(interaction) {
-    const guild = interaction.guild;
-    const roles = (await guild.roles.fetch())
-      .filter(r => r.id !== guild.id)            // hide @everyone
-      .sort((a, b) => b.position - a.position);  // highest first
-
-    const lines = roles.map(r => `<@&${r.id}> (${r.members.size} members)`);
-
-    const embed = new EmbedBuilder()
-      .setTitle(`Roles in ${guild.name} (${roles.size})`)
-      .setDescription(truncate(lines.join('\n') || 'No roles.'))
-      .setColor(0xfaa61a);
-
-    await interaction.reply({ embeds: [embed] });
-  },
-};
-```
-
-> `r.members` only counts members that are cached. `/users` fetches all members first, and the bot also caches members as they are seen, so counts may be slightly low right after a restart.
-
-### `/channels`: list channels
-
-`commands/channels.js`
-
-```js
-const { SlashCommandBuilder, EmbedBuilder, ChannelType } = require('discord.js');
-const { truncate } = require('../utils');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('channels')
-    .setDescription('List all channels in this server')
-    .setDMPermission(false),
-
-  async execute(interaction) {
-    const channels = await interaction.guild.channels.fetch();
-
-    const groups = [
-      ['Text', ChannelType.GuildText],
-      ['Voice', ChannelType.GuildVoice],
-      ['Announcements', ChannelType.GuildAnnouncement],
-      ['Forums', ChannelType.GuildForum],
-      ['Stages', ChannelType.GuildStageVoice],
-    ];
-
-    const sections = groups
-      .map(([label, type]) => {
-        const list = channels.filter(c => c && c.type === type).sort((a, b) => a.rawPosition - b.rawPosition);
-        return list.size ? `**${label} (${list.size})**\n${list.map(c => `<#${c.id}>`).join(' ')}` : null;
-      })
-      .filter(Boolean);
-
-    const embed = new EmbedBuilder()
-      .setTitle(`Channels in ${interaction.guild.name}`)
-      .setDescription(truncate(sections.join('\n\n') || 'No channels.'))
-      .setColor(0x57f287);
-
-    await interaction.reply({ embeds: [embed] });
-  },
-};
-```
-
-### `/commands`: the integration command
-
-`commands/commands.js`
-
-```js
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { truncate, getCommandMap, commandMention } = require('../utils');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('commands')
-    .setDescription('List every bot command as a clickable shortcut'),
-
-  async execute(interaction) {
-    await interaction.deferReply();
-    const map = await getCommandMap(interaction.client, interaction.guildId);
-
-    const lines = [...map.values()].map(cmd => `${commandMention(map, cmd.name)} - ${cmd.description}`);
-
-    const embed = new EmbedBuilder()
-      .setTitle('Available commands')
-      .setDescription(truncate(lines.join('\n') || 'No commands found.'))
-      .setFooter({ text: 'Click a command to run it.' })
-      .setColor(0x5865f2);
-
-    await interaction.editReply({ embeds: [embed] });
-  },
-};
-```
+</details>
 
 ---
 
-## How to use the `</commands:ID>` integration command
+<a id="style-plain"></a>
+### ⬜ Plain: no color
 
-### What the syntax means
+Leave out the language name. Good for file trees, command lists and anything that is not code.
 
-Discord lets a bot post a **clickable slash command**. The format is:
+**Copy this:**
 
+````
 ```
-</commandName:COMMAND_ID>
+/github username
+/users
+/roles
+/channels
 ```
-
-When someone clicks it, Discord puts that command into their message box, ready to send.
-
-Two things to know:
-
-- `</commands:00000>` is a **placeholder**. `00000` is not a real ID. If you post it as-is, Discord shows it as plain text instead of a clickable link.
-- The real ID is assigned by Discord when you register the command, so every bot and every server (for guild commands) has a different one.
-
-### Option A: just run `/commands`
-
-After `npm run deploy` and `npm start`, type `/commands` in your server. The bot looks up the real IDs and replies with a clickable list of every command. Nothing to configure.
-
-### Option B: get the ID yourself
-
-1. Register your commands (`npm run deploy`).
-2. Run this one-off script (or add it to any command):
-
-   ```js
-   // get-ids.js
-   require('dotenv').config();
-   const { Client, GatewayIntentBits } = require('discord.js');
-   const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
-   client.once('ready', async () => {
-     const cmds = process.env.GUILD_ID
-       ? await client.application.commands.fetch({ guildId: process.env.GUILD_ID })
-       : await client.application.commands.fetch();
-     cmds.forEach(c => console.log(`</${c.name}:${c.id}>`));
-     client.destroy();
-   });
-
-   client.login(process.env.DISCORD_TOKEN);
-   ```
-
-3. Run `node get-ids.js` and copy the printed mentions.
-
-### Option C: use it anywhere in your own code
-
-```js
-const { getCommandMap, commandMention } = require('./utils');
-
-const map = await getCommandMap(interaction.client, interaction.guildId);
-
-await interaction.reply(`Try ${commandMention(map, 'github')} to look up a profile!`);
-// For a subcommand: commandMention(map, 'github', 'profile')
-```
-
-If the command is not found, the helper falls back to plain text like `/github`, so your bot never breaks.
+````
 
 ---
 
-## Troubleshooting
+<a id="style-more"></a>
+### 🧰 More languages
+
+Discord can color many other languages too. Use the name right after the three backticks:
+
+| Name | Language | Example start |
+| --- | --- | --- |
+| `yaml` | YAML | ` ```yaml ` |
+| `bash` | Terminal commands | ` ```bash ` |
+| `md` | Markdown | ` ```md ` |
+| `py` | Python | ` ```py ` |
+| `html` | HTML | ` ```html ` |
+| `sql` | SQL | ` ```sql ` |
+| `cpp` | C++ | ` ```cpp ` |
+| `java` | Java | ` ```java ` |
+
+Exact colors differ by language, so try one and see how it looks. More styles will be added here over time.
+
+---
+
+<a id="templates"></a>
+## 🧪 Templates
+
+Ready-made messages. Copy, edit the words, send.
+
+### 📢 Announcement
+
+````
+```ini
+[ Server Announcement ]
+Event = Game night
+Date = Friday 8 PM
+Where = Voice channel 1
+```
+````
+
+### 📝 Changelog
+
+````
+```diff
++ Added: new /help command
++ Added: dark mode theme
+- Removed: old welcome message
+```
+````
+
+### 🟢 Status board
+
+````
+```diff
++ Website: online
++ Bot: online
+- Database: offline
+```
+````
+
+### ⚠️ Warning
+
+````
+```fix
+WARNING: Server restart in 5 minutes. Please save your progress.
+```
+````
+
+### 📜 Rules (two colors in one message)
+
+You can send several code blocks in one message.
+
+````
+```ini
+[ Server Rules ]
+```
+```diff
++ Be respectful
++ Use the right channel
+- No spam
+- No self-promotion
+```
+````
+
+---
+
+<a id="other-formatting"></a>
+## ✨ Other Discord formatting
+
+Not code blocks, but handy to know:
+
+| Type this | You get |
+| --- | --- |
+| `**bold**` | **bold** |
+| `*italic*` | *italic* |
+| `__underline__` | underlined text |
+| `~~strikethrough~~` | ~~strikethrough~~ |
+| `\|\|spoiler\|\|` | hidden text, click to reveal |
+| `` `inline code` `` | `inline code` in a small gray box |
+| `> quote` | a quoted line (put it at the start of a line) |
+| `# Big heading` | a large heading (start of a line) |
+| `-# small text` | small gray text (start of a line) |
+
+---
+
+<a id="rules"></a>
+## 📏 Rules and limits
+
+1. **No space** between the backticks and the language name. ` ```diff ` works, ` ``` diff ` does not.
+2. Language names are **lowercase**.
+3. The language name goes on the **first line**. Your text starts on the **next line**.
+4. Close the block with three backticks on **their own line**.
+5. Messages are limited to **2000 characters** (4000 with Nitro).
+6. You cannot put three backticks **inside** a Discord code block.
+7. Colors vary by theme and device.
+
+---
+
+<a id="troubleshooting"></a>
+## 🛟 Troubleshooting
 
 | Problem | Fix |
 | --- | --- |
-| Commands don't show up | Run `npm run deploy` again. Global commands can take up to an hour; set `GUILD_ID` for instant updates. |
-| `Used disallowed intents` | Enable **Server Members Intent** in the Developer Portal under Bot. |
-| `/users` only shows a few people | The Server Members Intent is off, or the server is very large. |
-| `Missing Access` / `Missing Permissions` | Re-invite the bot using a URL with the `applications.commands` scope and the permissions above. |
-| `</commands:00000>` isn't clickable | `00000` is a placeholder. Use the real ID from `/commands` or Option B. |
-| Token leaked | Reset it right away in the Developer Portal and update `.env`. |
+| No color at all | Check the spelling. It must be lowercase with no space after the backticks |
+| The word `diff` shows inside the block | The language name and your text are on the same line. Press **Shift + Enter** after the name |
+| Enter sends the message too early | Use **Shift + Enter** for a new line |
+| `+` and `-` are not green and red | They must be the very first character on the line |
+| Block looks broken | Put the closing three backticks on their own line |
+| Message will not send | It is over 2000 characters. Shorten it or split it |
+| Looks different on my phone | Mobile themes use slightly different colors. Test on both |
 
 ---
 
-## Contributing
+<a id="roadmap"></a>
+## 🧭 Roadmap
 
-Pull requests are welcome. Fork the repo, create a branch, make your change, and open a PR. Please keep new commands in their own file under `commands/`.
+- [x] `diff`, `fix`, `ini`, `css`, `json`, `js` and plain blocks
+- [x] Color cheat sheet
+- [x] Ready-made templates
+- [ ] 🌈 `ansi` blocks for more colors (desktop only)
+- [ ] 👤 Mentions for users, roles, channels and slash commands
+- [ ] 🕒 Timestamps that show in each person's time zone
+- [ ] 🖼 Screenshots and GIFs of every style
+- [ ] 📱 Mobile notes
+- [ ] 🧪 More templates (tickets, giveaways, schedules)
 
-## License
+---
 
-MIT
+<a id="add-your-own"></a>
+## ➕ Add your own style
+
+Copy this template to add a new section to the guide. Keep the same layout so the guide stays easy to scan.
+
+`````
+<a id="style-NAME"></a>
+### EMOJI NAME: short title
+
+| | |
+| --- | --- |
+| **Colors** | What turns which color |
+| **Best for** | When to use it |
+
+**Copy this:**
+
+````
+```NAME
+your example here
+```
+````
+
+**Tips**
+- One useful tip
+- Another useful tip
+`````
+
+Then add a row to the [color cheat sheet](#colors) and a checkbox to the [roadmap](#roadmap).
+
+---
+
+<a id="contributing"></a>
+## 🤝 Contributing
+
+Found a new trick, a better example, or a mistake? Contributions are welcome.
+
+1. 🍴 Fork this repository
+2. 🌿 Create a branch, for example `add-ansi-colors`
+3. ✏️ Add your section using the template above
+4. 📬 Open a pull request and say what you added
+
+Please test every example in a real Discord server before submitting.
+
+---
+
+<a id="credits"></a>
+## 🙏 Credits
+
+Made for the Discord community. If you add icons from Flaticon or another site, credit the authors here.
+
+<!-- Example: Icons by AUTHOR NAME from Flaticon (https://www.flaticon.com) -->
+
+## 📄 License
+
+MIT. Free to use, share and improve.
+
+<div align="center">
+
+⭐ If GitCord helped you, give it a star so others can find it.
+
+</div>
