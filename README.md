@@ -9,7 +9,7 @@
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 
-[🚀 Quick start](#quick-start) · [🎨 Colors](#colors) · [📚 Styles](#styles) · [🧪 Templates](#templates) · [🧭 Roadmap](#roadmap)
+[🚀 Quick start](#quick-start) · [🎨 Colors](#colors) · [📚 Styles](#styles) · [🧪 Templates](#templates) · [🧰 Features](#features) · [🧭 Roadmap](#roadmap)
 
 </div>
 
@@ -18,9 +18,9 @@
 <a id="what-is-gitcord"></a>
 ## 📖 What is GitCord?
 
-Discord has no "text color" button. But if you put your text inside a **code block** and add a **language name**, Discord colors it for you. That is how servers get green and red changelogs, blue announcement headers and yellow warnings.
+Discord has no "text color" button. But if you put your text inside a **code block** and add a **language name**, Discord colors it for you. That is how servers get green and red changelogs, blue announcement headers, and yellow warnings.
 
-GitCord collects those tricks in one place, with **ready-to-copy examples**, **tips**, **templates** and **fixes** for when something does not work.
+GitCord collects those tricks in one place, with **ready-to-copy examples**, **tips**, **templates**, and **fixes** for when something does not work.
 
 ---
 
@@ -34,6 +34,7 @@ GitCord collects those tricks in one place, with **ready-to-copy examples**, **t
 | 📚 | [Styles](#styles) | `diff`, `fix`, `ini`, `css`, `json`, `js`, plain, and more |
 | 🧪 | [Templates](#templates) | Announcements, changelogs, rules, status boards |
 | ✨ | [Other formatting](#other-formatting) | Bold, italic, spoilers, quotes, headings |
+| 🧰 | [Features and commands](#features) | Timestamps, scheduled events, timeout, slowmode |
 | 📏 | [Rules and limits](#rules) | What to remember |
 | 🛟 | [Troubleshooting](#troubleshooting) | Fix common problems |
 | 🧭 | [Roadmap](#roadmap) | What is coming next |
@@ -428,8 +429,71 @@ Not code blocks, but handy to know:
 | `\|\|spoiler\|\|` | hidden text, click to reveal |
 | `` `inline code` `` | `inline code` in a small gray box |
 | `> quote` | a quoted line (put it at the start of a line) |
-| `# Big heading` | a large heading (start of a line) |
+| `# Large` | a large heading, see [Headings](#headings) |
 | `-# small text` | small gray text (start of a line) |
+
+<a id="headings"></a>
+### 🔠 Headings
+
+Start a line with `#` to make a heading. More `#` signs means a smaller heading.
+
+| Type this | Size |
+| --- | --- |
+| `# Large` | Large |
+| `## Mid` | Mid |
+| `### Normal` | Normal |
+| `-# Small` | Small gray text |
+
+**Copy this:**
+
+````
+# Large
+## Mid
+### Normal
+-# Small
+````
+
+**Tips**
+- Put a space after the `#`.
+- The `#` must be at the **start of the line**.
+- Headings do not work inside code blocks.
+
+---
+
+<a id="features"></a>
+## 🧰 Discord features and commands
+
+Handy built-in Discord features, short and simple.
+
+| Feature | What it does | How to use it |
+| --- | --- | --- |
+| 🕒 **Dynamic timestamps** (`@time`) | Shows a time in each viewer's own time zone | Type `@time` plus a date or relative term, like `@time tomorrow at 5pm`. Or build one yourself with `<t:UNIX_TIMESTAMP:format>` |
+| ⏰ **Scheduled messages** | Posts a message or announcement automatically at a set time | Click the **+** icon in the chat bar, choose **Schedule a message**, set the time, and write your message |
+| 📅 **Scheduled events** | Creates a calendar entry for a game night or meeting, with RSVPs and notifications | Click your server name, choose **Create Event**, then fill in the topic, time and location. Members click **Interested** to get notified when it starts |
+| 🔇 **Timeout** | Temporarily stops a user from messaging, reacting or joining voice | Right-click the user, choose **Timeout**, and pick a duration (60 seconds up to 28 days). It lifts automatically |
+| 🐢 **Slowmode** | Limits how often people can send messages in a text channel | Open **Edit Channel**, then move the **Slowmode** slider (up to 6 hours). A countdown shows on the chat bar after each message |
+
+> 🔑 **Permissions:** Timeout needs **Timeout Members**, creating events needs **Create Events** (or **Manage Events**), and changing slowmode needs **Manage Channels**.
+
+### 🕒 Timestamp formats
+
+Replace `UNIX_TIMESTAMP` with a Unix time in seconds (any online Unix timestamp converter will give you one) and pick a format letter:
+
+| Tag | Shows |
+| --- | --- |
+| `<t:UNIX_TIMESTAMP:t>` | Short time |
+| `<t:UNIX_TIMESTAMP:T>` | Long time |
+| `<t:UNIX_TIMESTAMP:d>` | Short date |
+| `<t:UNIX_TIMESTAMP:D>` | Long date |
+| `<t:UNIX_TIMESTAMP:f>` | Short date and time (default) |
+| `<t:UNIX_TIMESTAMP:F>` | Long date and time with weekday |
+| `<t:UNIX_TIMESTAMP:R>` | Relative, like "in 3 hours" |
+
+**Copy this:**
+
+````
+<t:1700000000:F> (<t:1700000000:R>)
+````
 
 ---
 
@@ -469,7 +533,8 @@ Not code blocks, but handy to know:
 - [x] Ready-made templates
 - [ ] 🌈 `ansi` blocks for more colors (desktop only)
 - [ ] 👤 Mentions for users, roles, channels and slash commands
-- [ ] 🕒 Timestamps that show in each person's time zone
+- [x] 🕒 Timestamps that show in each person's time zone
+- [x] 🧰 Features and commands (scheduled events, timeout, slowmode)
 - [ ] 🖼 Screenshots and GIFs of every style
 - [ ] 📱 Mobile notes
 - [ ] 🧪 More templates (tickets, giveaways, schedules)
