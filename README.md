@@ -18,9 +18,9 @@
 <a id="what-is-gitcord"></a>
 ## 📖 What is GitCord?
 
-Discord has no "text color" button. But if you put your text inside a **code block** and add a **language name**, Discord colors it for you. That is how servers get green and red changelogs, blue announcement headers, and yellow warnings.
+Discord has no "text color" button. But if you put your text inside a **code block** and add a **language name**, Discord colors it for you. That is how servers get green and red changelogs, blue announcement headers and yellow warnings.
 
-GitCord collects those tricks in one place, with **ready-to-copy examples**, **tips**, **templates**, and **fixes** for when something does not work.
+GitCord collects those tricks in one place, with **ready-to-copy examples**, **tips**, **templates** and **fixes** for when something does not work.
 
 ---
 
